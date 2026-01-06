@@ -33,14 +33,35 @@ class DemoRestApi(APIView):
         data_list.append(data)
         return Response({'message': 'Dato guardado exitosamente.', 'data': data}, status=status.HTTP_201_CREATED)
     
-    def put(self, request):
+class DemoRestApiItem(APIView):
+    
+    def put(self, request, id):
         data = request.data
-        if 'id' not in data:
-            return Response({'error': 'El campo id es obligatorio.'}, status=status.HTTP_400_BAD_REQUEST)
+        id = str(id)
+        if ('name' not in data) or ('email' not in data) or ('is_active' not in data):
+            return Response({'error': 'Faltan campos requeridos.'}, status=status.HTTP_400_BAD_REQUEST)
         for item in data_list:
-            if (item['id'] == data['id']):
+            if (item['id'] == id):
                 item['name'] = data.get('name')
                 item['email'] = data.get('email')
-                item['is_active'] = data.get('is_active', item['is_active']) # Se usa get porque puede que data no tenga los campos. Evitamos errores.
-                return Response({'message': 'Elemento actualizado completamente', 'data': item}, status=status.HTTP_200_OK)
+                item['is_active'] = data.get('is_active')
+                return Response({'message': 'Elemento actualizado completamente.', 'data': item}, status=status.HTTP_200_OK)
+        return Response({'message': 'Elemento no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+
+    def patch(self, request, id):
+        data = request.data
+        id = str(id)
+        for item in data_list:
+            if (item['id'] == id):
+                item['name'] = data.get('name', item['name'])
+                item['email'] = data.get('email', item['email'])
+                item['is_active'] = data.get('is_active', item['is_active'])
+                return Response({'message': 'Elemento actualizado parcialmente.', 'data': item}, status=status.HTTP_200_OK)
+        return Response({'message': 'Elemento no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+    
+    def delete(self, request, id):
+        for item in data_list:
+            if(item['id'] == str(id) and item['is_active']):
+                item['is_active'] = False
+                return Response({'message': 'Elemento eliminado lógicamente.', 'data': item}, status=status.HTTP_200_OK)
         return Response({'message': 'Elemento no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
