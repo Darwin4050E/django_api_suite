@@ -17,10 +17,12 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("homepage/", include("homepage.urls")),
-    path("demo_rest_api/", include("demo_rest_api.urls")),
-    path("landing/api/", include("landing_api.urls"))
+    path("demo/rest/api/", include("demo_rest_api.urls")),
+    path("landing/api/", include("landing_api.urls")),
+    path('', RedirectView.as_view(url='/homepage/index', permanent=False))
 ]
