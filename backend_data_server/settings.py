@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "homepage",
-    "landing_api"
+    "landing_api",
     "firebase_admin",
     "rest_framework",
     "demo_rest_api"
