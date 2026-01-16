@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from firebase_admin import db
-import datetime
+from datetime import datetime
 
 class LandingAPI(APIView):
     name = "Landing API"
